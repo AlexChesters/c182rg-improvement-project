@@ -3,15 +3,15 @@
 class AC182RG extends BaseInstrument {
   constructor() {
     super()
-    console.log('src182rg')
+    console.log('ac182rg')
 
     var titleFromSimvar = SimVar.GetSimVarValue('TITLE', 'string')
     this.aircraftIdentifier = titleFromSimvar.replace(/\s+/g, '_')
     this.shouldTrackPersistence = false
   }
 
-  //load the gauge template - found in SRC182RG.HTML
-  get templateID() { return 'SRC182RG' }
+  //load the gauge template - found in AC182RG.HTML
+  get templateID() { return 'AC182RG' }
 
   // runs every frame
   Update() {
