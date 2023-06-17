@@ -16,7 +16,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
       - name: zip
-        run: zip -9 c182rg-improvement-project.zip c182rg-improvement-project
+        run: zip -r c182rg-improvement-project.zip c182rg-improvement-project
       - name: assume-github-actions-role
         uses: aws-actions/configure-aws-credentials@v2
         with:
