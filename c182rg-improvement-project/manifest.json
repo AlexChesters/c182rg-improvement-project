@@ -1,0 +1,21 @@
+{
+  "dependencies": [
+    {
+      "name": "carenado-aircraft-c182rg",
+      "package_version": "1.0.1"
+    }
+  ],
+  "content_type": "AIRCRAFT",
+  "title": "C182 RG II",
+  "manufacturer": "Carenado",
+  "creator": "Alex Chesters",
+  "package_version": "1.0.0",
+  "minimum_game_version": "1.32.7",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "total_package_size": "00000000000013194770"
+}
