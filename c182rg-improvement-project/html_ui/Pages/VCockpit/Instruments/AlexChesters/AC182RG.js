@@ -1,6 +1,6 @@
 'use strict'
 
-class SRC182RG extends BaseInstrument {
+class AC182RG extends BaseInstrument {
   constructor() {
     super()
     console.log('src182rg')
@@ -31,16 +31,16 @@ class SRC182RG extends BaseInstrument {
       console.log('left volume', leftTankVolume)
       console.log('right volume', rightTankVolume)
       
-      SetStoredData('SRC182RG_LEFT_FUEL_TANK_'+ this.aircraftIdentifier, leftTankVolume.toString())
-      SetStoredData('SRC182RG_RIGHT_FUEL_TANK_'+ this.aircraftIdentifier, rightTankVolume.toString())
+      SetStoredData('AC182RG_LEFT_FUEL_TANK_'+ this.aircraftIdentifier, leftTankVolume.toString())
+      SetStoredData('AC182RG_RIGHT_FUEL_TANK_'+ this.aircraftIdentifier, rightTankVolume.toString())
     } catch (ex) {
       console.error('error persisting state', ex)
     }
   }
 
   applyState() {
-    var leftTankStoredVolume = GetStoredData('SRC182RG_LEFT_FUEL_TANK_'+ this.aircraftIdentifier)
-    var rightTankStoredVolume = GetStoredData('SRC182RG_RIGHT_FUEL_TANK_'+ this.aircraftIdentifier)
+    var leftTankStoredVolume = GetStoredData('AC182RG_LEFT_FUEL_TANK_'+ this.aircraftIdentifier)
+    var rightTankStoredVolume = GetStoredData('AC182RG_RIGHT_FUEL_TANK_'+ this.aircraftIdentifier)
 
     console.log('applying left volume', leftTankStoredVolume)
     console.log('applying right volume', rightTankStoredVolume)
@@ -65,4 +65,4 @@ class SRC182RG extends BaseInstrument {
 
 }
 
-registerInstrument('src182rg-element', SRC182RG)
+registerInstrument('ac182rg-element', AC182RG)
