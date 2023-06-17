@@ -3,8 +3,6 @@
 class AC182RG extends BaseInstrument {
   constructor() {
     super()
-    console.log('ac182rg')
-
     var titleFromSimvar = SimVar.GetSimVarValue('TITLE', 'string')
     this.aircraftIdentifier = titleFromSimvar.replace(/\s+/g, '_')
     this.shouldTrackPersistence = false
@@ -22,14 +20,9 @@ class AC182RG extends BaseInstrument {
   persistState() {
     if (!this.shouldTrackPersistence) return
 
-    console.log('persisting state')
-
     try {
       var leftTankVolume = SimVar.GetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'gallons')
       var rightTankVolume = SimVar.GetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'gallons')
-      
-      console.log('left volume', leftTankVolume)
-      console.log('right volume', rightTankVolume)
       
       SetStoredData('AC182RG_LEFT_FUEL_TANK_'+ this.aircraftIdentifier, leftTankVolume.toString())
       SetStoredData('AC182RG_RIGHT_FUEL_TANK_'+ this.aircraftIdentifier, rightTankVolume.toString())
@@ -55,14 +48,12 @@ class AC182RG extends BaseInstrument {
   // 3 = in game
   onGameStateChanged(oldState, newState) {
     super.onGameStateChanged()
-    
-    console.log('onGameStateChanged', oldState, newState)
+
     if (!oldState && newState === 3) {
       this.applyState()
       this.shouldTrackPersistence = true
     }
   }
-
 }
 
 registerInstrument('ac182rg-element', AC182RG)
