@@ -4,8 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+      "prebuild": "sh scripts/prebuild.sh",
       "build": "sh scripts/build.sh",
-      "postbuild": "sh scripts/postbuild.sh"
+      "postbuild": "sh scripts/postbuild.sh",
+      "package": "sh scripts/package.sh"
     },
     "author": "Alex Chesters",
     "license": "MIT",
