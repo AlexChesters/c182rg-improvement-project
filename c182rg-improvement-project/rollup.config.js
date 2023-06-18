@@ -1,9 +1,10 @@
 import resolve from '@rollup/plugin-node-resolve'
 import copy from 'rollup-plugin-copy'
 import mv from 'rollup-plugin-mv'
+import typescript from '@rollup/plugin-typescript'
 
 export default {
-  input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.js',
+  input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.ts',
   output: {
     dir: 'build',
     format: 'es',
@@ -11,6 +12,7 @@ export default {
   },
   plugins: [
     resolve(),
+    typescript(),
     copy({
       targets: [
         {
