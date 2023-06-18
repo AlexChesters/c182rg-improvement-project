@@ -1,5 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve'
 import copy from 'rollup-plugin-copy'
+import mv from 'rollup-plugin-mv'
 
 export default {
   input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.js',
@@ -25,6 +26,12 @@ export default {
           dest: 'build'
         }
       ]
-    })
+    }),
+    mv([
+      {
+        src: 'build/AC182RG.js',
+        dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.js'
+      }
+    ])
   ]
 }
