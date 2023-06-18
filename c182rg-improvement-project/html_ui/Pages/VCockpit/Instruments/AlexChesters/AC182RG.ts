@@ -1,6 +1,13 @@
-'use strict'
+/// <reference types="@microsoft/msfs-types/pages/vcockpit/instruments/shared/baseinstrument.d.ts" />
+/// <reference types="@microsoft/msfs-types/js/datastorage.d.ts" />
+/// <reference types="@microsoft/msfs-types/pages/vcockpit/core/vcockpit" />
+/// <reference types="@microsoft/msfs-types/JS/SimVar" />
+/// <reference types="@microsoft/msfs-types/js/common" />
 
 class AC182RG extends BaseInstrument {
+  aircraftIdentifier: string
+  shouldTrackPersistence: boolean
+
   constructor() {
     super()
     var titleFromSimvar = SimVar.GetSimVarValue('TITLE', 'string')
@@ -9,7 +16,7 @@ class AC182RG extends BaseInstrument {
   }
 
   //load the gauge template - found in AC182RG.HTML
-  get templateID() { return 'AC182RG' }
+  get templateID(): string { return 'AC182RG' }
 
   // runs every frame
   Update() {
@@ -39,14 +46,11 @@ class AC182RG extends BaseInstrument {
     SimVar.SetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'gallons', Number(rightTankStoredVolume || 10))
   }
   
-  // 0 = main menu
-  // 1 = loading
-  // 2 = briefing
-  // 3 = in game
-  onGameStateChanged(oldState, newState) {
-    super.onGameStateChanged()
+  onGameStateChanged(oldState: GameState, newState: GameState) {
+    super.onGameStateChanged(oldState, newState)
 
-    if (!oldState && newState === 3) {
+    if (newState === GameState.ingame) {
+      console.log('game has started, applying state')
       this.applyState()
       this.shouldTrackPersistence = true
     }
