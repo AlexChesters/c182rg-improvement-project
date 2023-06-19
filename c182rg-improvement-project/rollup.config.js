@@ -25,6 +25,10 @@ export default {
         {
           src: 'SimObjects',
           dest: 'build'
+        },
+        {
+          src: 'docs/README.txt',
+          dest: 'build'
         }
       ]
     }),
