@@ -32,11 +32,11 @@ jobs:
         run: Rename-Item -Path build -NewName c182rg-improvement-project
       - name: package code
         run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
-      - name: ls
-        run: Get-ChildItem
+      # https://github.com/softprops/action-gh-release/issues/158
+      - name: move file to root
+        run: Move-Item -Path c182rg-improvement-project.zip -Destination ..
       - name: release
         uses: softprops/action-gh-release@v1
         with:
           fail_on_unmatched_files: true
-          files: |
-            ./c182rg-improvement-project.zip
+          files: c182rg-improvement-project.zip
