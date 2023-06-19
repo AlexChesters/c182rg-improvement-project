@@ -27,8 +27,10 @@ jobs:
         run: npm ci
       - name: build code
         run: npm run build
+      - name: rename build folder
+        run: Rename-Item -Path build -NewName c182rg-improvement-project
       - name: package code
-        run: Compress-Archive -Path build -DestinationPath c182rg-improvement-project.zip
+        run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
       - name: assume-github-actions-role
         uses: aws-actions/configure-aws-credentials@v2
         with:
