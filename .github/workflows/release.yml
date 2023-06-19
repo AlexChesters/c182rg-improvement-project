@@ -32,11 +32,17 @@ jobs:
         run: Rename-Item -Path build -NewName c182rg-improvement-project
       - name: package code
         run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
-      # https://github.com/softprops/action-gh-release/issues/158
-      - name: move file to root
-        run: Move-Item -Path c182rg-improvement-project.zip -Destination ..
+      - name: assume-github-actions-role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
+          aws-region: eu-west-1
+      - name: deploy
+        run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/$GITHUB_REF_NAME/c182rg-improvement-project.zip --cache-control max-age=60
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          fail_on_unmatched_files: true
-          files: c182rg-improvement-project.zip
+          body: |
+            # v$GIHUB_REF_NAME
+
+            https://projects.alexchesters.com/c182rg-improvement-project/$GITHUB_REF_NAME/c182rg-improvement-project.zip
