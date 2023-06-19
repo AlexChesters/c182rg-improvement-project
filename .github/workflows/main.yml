@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
 
     steps:
       - name: checkout code
