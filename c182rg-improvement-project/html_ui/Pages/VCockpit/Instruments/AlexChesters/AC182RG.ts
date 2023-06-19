@@ -13,7 +13,8 @@ type AC182RGPersistentStorageIds = {
   },
   switchPanel: {
     masterBattery: string,
-    alternator:string
+    alternator: string,
+    avionics: string
   }
 }
 
@@ -37,7 +38,8 @@ class AC182RG extends BaseInstrument {
       },
       switchPanel: {
         masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
-        alternator: `AC182RG_ALTERNATOR_${this.aircraftIdentifier}`
+        alternator: `AC182RG_ALTERNATOR_${this.aircraftIdentifier}`,
+        avionics: `AC182RG_AVIONICS_${this.aircraftIdentifier}`
       }
     }
 
@@ -67,12 +69,15 @@ class AC182RG extends BaseInstrument {
   persistSwitchPanelState() {
     var masterBattery = SimVar.GetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'bool')
     var alternator = SimVar.GetSimVarValue('GENERAL ENG MASTER ALTERNATOR:1', 'bool')
+    var avionics = SimVar.GetSimVarValue('AVIONICS MASTER SWITCH', 'bool')
     
     logger.debug('persisting master battery', masterBattery)
     logger.debug('persisting alternator', alternator)
+    logger.debug('persisting avionics', avionics)
 
     SetStoredData(this.storageIds.switchPanel.masterBattery, masterBattery.toString())
     SetStoredData(this.storageIds.switchPanel.alternator, alternator.toString())
+    SetStoredData(this.storageIds.switchPanel.avionics, avionics.toString())
   }
 
   persistState() {
@@ -100,13 +105,18 @@ class AC182RG extends BaseInstrument {
   applySwitchPanelState() {
     var masterBattery = GetStoredData(this.storageIds.switchPanel.masterBattery)
     var alternator = GetStoredData(this.storageIds.switchPanel.alternator)
+    var avionics = GetStoredData(this.storageIds.switchPanel.avionics)
 
     logger.log('applying master battery state', masterBattery)
     logger.log('applying alternator state', alternator)
+    logger.log('applying avionics state', avionics)
 
     SimVar.SetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'number', Number(masterBattery))
     if (Number(alternator)) {
       SimVar.SetSimVarValue('K:ALTERNATOR_ON', 'number', 1)
+    }
+    if (Number(avionics)) {
+      SimVar.SetSimVarValue('K:AVIONICS_MASTER_1_ON', 'number', 1)
     }
   }
 
