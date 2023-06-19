@@ -35,4 +35,5 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
+          fail_on_unmatched_files: true
           files: c182rg-improvement-project.zip
