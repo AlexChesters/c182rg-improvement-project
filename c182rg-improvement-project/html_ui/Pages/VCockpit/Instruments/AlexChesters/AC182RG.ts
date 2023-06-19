@@ -25,14 +25,12 @@ type AC182RGPersistentStorageIds = {
 
 class AC182RG extends BaseInstrument {
   aircraftIdentifier: string
-  shouldTrackPersistence: boolean
   storageIds: AC182RGPersistentStorageIds
 
   constructor() {
     super()
     var titleFromSimvar = SimVar.GetSimVarValue('TITLE', 'string')
     this.aircraftIdentifier = titleFromSimvar.replace(/\s+/g, '_')
-    this.shouldTrackPersistence = false
 
     logger.log('aircraft identifier is', this.aircraftIdentifier)
 
@@ -56,13 +54,11 @@ class AC182RG extends BaseInstrument {
     logger.log(JSON.stringify(this.storageIds))
   }
 
-  //load the gauge template - found in AC182RG.HTML
-  get templateID(): string { return 'AC182RG' }
+  // returned string must match the gauge template ID in AC182RG.HTML
+  get templateID() { return 'AC182RG' }
 
-  // runs every frame
   Update() {
     super.Update()
-    this.persistState()
   }
 
   persistFuelState() {
@@ -106,8 +102,6 @@ class AC182RG extends BaseInstrument {
   }
 
   persistState() {
-    if (!this.shouldTrackPersistence) return
-
     try {
       this.persistFuelState()
       this.persistSwitchPanelState()
@@ -173,15 +167,18 @@ class AC182RG extends BaseInstrument {
   applyState() {
     this.applyFuelState()
     this.applySwitchPanelState()
+
+    setInterval(() => {
+      this.persistState()
+    }, 10000)
   }
   
   onGameStateChanged(oldState: GameState, newState: GameState) {
     super.onGameStateChanged(oldState, newState)
 
     if (newState === GameState.ingame) {
-      logger.log('game has started, applying state')
+      logger.log('game has started, applying saved state')
       this.applyState()
-      this.shouldTrackPersistence = true
     }
   }
 }
