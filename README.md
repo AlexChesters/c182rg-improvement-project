@@ -31,3 +31,9 @@ c182rg-improvement-project/
     * fuel levels
     * battery/alternator/avionics/pitot heat switches
     * light switches
+
+# Planned features
+Planned features can be found by looking at th
+[issues](https://github.com/AlexChesters/c182rg-improvement-project/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
+on this repository. If you have a feature you'd like to hand please do
+[raise an issue](https://github.com/AlexChesters/c182rg-improvement-project/issues/new).
