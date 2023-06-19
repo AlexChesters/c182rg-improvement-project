@@ -1,8 +1,8 @@
-/// <reference types="@microsoft/msfs-types/pages/vcockpit/instruments/shared/baseinstrument.d.ts" />
-/// <reference types="@microsoft/msfs-types/js/datastorage.d.ts" />
-/// <reference types="@microsoft/msfs-types/pages/vcockpit/core/vcockpit" />
-/// <reference types="@microsoft/msfs-types/JS/SimVar" />
-/// <reference types="@microsoft/msfs-types/js/common" />
+/// <reference types='@microsoft/msfs-types/pages/vcockpit/instruments/shared/baseinstrument.d.ts' />
+/// <reference types='@microsoft/msfs-types/js/datastorage.d.ts' />
+/// <reference types='@microsoft/msfs-types/pages/vcockpit/core/vcockpit' />
+/// <reference types='@microsoft/msfs-types/JS/SimVar' />
+/// <reference types='@microsoft/msfs-types/js/common' />
 
 import logger from './utils/logger'
 
@@ -12,7 +12,8 @@ type AC182RGPersistentStorageIds = {
     rightTankVolume: string
   },
   switchPanel: {
-    masterBattery: string
+    masterBattery: string,
+    alternator:string
   }
 }
 
@@ -35,7 +36,8 @@ class AC182RG extends BaseInstrument {
         rightTankVolume: `AC182RG_RIGHT_FUEL_TANK_${this.aircraftIdentifier}`
       },
       switchPanel: {
-        masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`
+        masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
+        alternator: `AC182RG_ALTERNATOR_${this.aircraftIdentifier}`
       }
     }
 
@@ -54,9 +56,6 @@ class AC182RG extends BaseInstrument {
   persistFuelState() {
     var leftTankVolume = SimVar.GetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'gallons')
     var rightTankVolume = SimVar.GetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'gallons')
-
-    logger.log('persisting left tank volume state', leftTankVolume)
-    logger.log('persisting right tank volume state', rightTankVolume)
     
     SetStoredData(this.storageIds.fuel.leftTankVolume, leftTankVolume.toString())
     SetStoredData(this.storageIds.fuel.rightTankVolume, rightTankVolume.toString())
@@ -64,10 +63,10 @@ class AC182RG extends BaseInstrument {
 
   persistSwitchPanelState() {
     var masterBattery = SimVar.GetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'bool')
-
-    logger.log('persisting master battery state', masterBattery)
+    var alternator = SimVar.GetSimVarValue('GENERAL ENG MASTER ALTERNATOR:1', 'bool')
 
     SetStoredData(this.storageIds.switchPanel.masterBattery, masterBattery.toString())
+    SetStoredData(this.storageIds.switchPanel.alternator, alternator.toString())
   }
 
   persistState() {
@@ -94,10 +93,15 @@ class AC182RG extends BaseInstrument {
 
   applySwitchPanelState() {
     var masterBattery = GetStoredData(this.storageIds.switchPanel.masterBattery)
+    var alternator = GetStoredData(this.storageIds.switchPanel.alternator)
 
     logger.log('applying master battery state', masterBattery)
+    logger.log('applying alternator state', alternator)
 
     SimVar.SetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'number', Number(masterBattery))
+    if (Number(alternator)) {
+      SimVar.SetSimVarValue('K:ALTERNATOR_ON', 'number', 1)
+    }
   }
 
   applyState() {
