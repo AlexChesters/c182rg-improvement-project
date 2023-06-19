@@ -5,6 +5,10 @@ mod to improve the Carenado C182RG for MSFS
 1. download https://projects.alexchesters.com/c182rg-improvement-project.zip
 1. unzip the above file to your MSFS Community folder
 
-# features
+# current features
 * state saving
     * fuel levels
+ 
+# planned features
+* state saving
+   * switch positions (e.g. master battery, alternator etc)
