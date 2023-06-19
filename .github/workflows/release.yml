@@ -39,9 +39,3 @@ jobs:
           aws-region: eu-west-1
       - name: deploy
         run: aws s3 cp c182rg-improvement-project.zip "s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/$env:GITHUB_REF_NAME/c182rg-improvement-project.zip" --cache-control max-age=60
-        env:
-          VERSION: 
-      - name: release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: "https://projects.alexchesters.com/c182rg-improvement-project/$env:GITHUB_REF_NAME/c182rg-improvement-project.zip"
