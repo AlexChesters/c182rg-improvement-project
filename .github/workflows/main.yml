@@ -28,7 +28,7 @@ jobs:
       - name: build code
         run: npm run build
       - name: package code
-        run: npm run package
+        run: Compress-Archive -Path build -DestinationPath c182rg-improvement-project.zip
       - name: assume-github-actions-role
         uses: aws-actions/configure-aws-credentials@v2
         with:
