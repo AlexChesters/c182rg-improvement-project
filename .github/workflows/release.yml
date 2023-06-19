@@ -44,7 +44,4 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          body: |
-            # "$env:GIHUB_REF_NAME"
-
-            https://projects.alexchesters.com/c182rg-improvement-project/$GITHUB_REF_NAME/c182rg-improvement-project.zip
+          body: "https://projects.alexchesters.com/c182rg-improvement-project/$env:GITHUB_REF_NAME/c182rg-improvement-project.zip"
