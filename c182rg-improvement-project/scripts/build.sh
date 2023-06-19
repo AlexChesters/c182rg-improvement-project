@@ -1,3 +1,3 @@
-set -eou pipefail
+set -e
 
 rollup -c
