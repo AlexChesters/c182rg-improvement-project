@@ -11,4 +11,4 @@ mod to improve the Carenado C182RG for MSFS
  
 # planned features
 * state saving
-   * switch positions (e.g. master battery, alternator etc)
+   * lights

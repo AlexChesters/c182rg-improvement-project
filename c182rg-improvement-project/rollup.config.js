@@ -7,8 +7,7 @@ export default {
   input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.ts',
   output: {
     dir: 'build',
-    format: 'es',
-    preserveModules: true
+    format: 'es'
   },
   plugins: [
     resolve(),
