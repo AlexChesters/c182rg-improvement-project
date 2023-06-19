@@ -56,14 +56,20 @@ class AC182RG extends BaseInstrument {
   persistFuelState() {
     var leftTankVolume = SimVar.GetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'gallons')
     var rightTankVolume = SimVar.GetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'gallons')
+
+    logger.debug('persisting left tank volume', leftTankVolume)
+    logger.debug('persisting right tank volume', rightTankVolume)
     
     SetStoredData(this.storageIds.fuel.leftTankVolume, leftTankVolume.toString())
     SetStoredData(this.storageIds.fuel.rightTankVolume, rightTankVolume.toString())
   }
-
+  
   persistSwitchPanelState() {
     var masterBattery = SimVar.GetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'bool')
     var alternator = SimVar.GetSimVarValue('GENERAL ENG MASTER ALTERNATOR:1', 'bool')
+    
+    logger.debug('persisting master battery', masterBattery)
+    logger.debug('persisting alternator', alternator)
 
     SetStoredData(this.storageIds.switchPanel.masterBattery, masterBattery.toString())
     SetStoredData(this.storageIds.switchPanel.alternator, alternator.toString())
