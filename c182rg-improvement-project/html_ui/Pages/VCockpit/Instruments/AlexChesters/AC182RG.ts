@@ -14,7 +14,8 @@ type AC182RGPersistentStorageIds = {
   switchPanel: {
     masterBattery: string,
     alternator: string,
-    avionics: string
+    avionics: string,
+    pitotHeat: string
   }
 }
 
@@ -39,7 +40,8 @@ class AC182RG extends BaseInstrument {
       switchPanel: {
         masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
         alternator: `AC182RG_ALTERNATOR_${this.aircraftIdentifier}`,
-        avionics: `AC182RG_AVIONICS_${this.aircraftIdentifier}`
+        avionics: `AC182RG_AVIONICS_${this.aircraftIdentifier}`,
+        pitotHeat: `AC182RG_PITOT_${this.aircraftIdentifier}`
       }
     }
 
@@ -70,14 +72,17 @@ class AC182RG extends BaseInstrument {
     var masterBattery = SimVar.GetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'bool')
     var alternator = SimVar.GetSimVarValue('GENERAL ENG MASTER ALTERNATOR:1', 'bool')
     var avionics = SimVar.GetSimVarValue('AVIONICS MASTER SWITCH', 'bool')
+    var pitotHeat = SimVar.GetSimVarValue('PITOT HEAT SWITCH', 'bool')
     
     logger.debug('persisting master battery', masterBattery)
     logger.debug('persisting alternator', alternator)
     logger.debug('persisting avionics', avionics)
+    logger.debug('persisting pitot heat', pitotHeat)
 
     SetStoredData(this.storageIds.switchPanel.masterBattery, masterBattery.toString())
     SetStoredData(this.storageIds.switchPanel.alternator, alternator.toString())
     SetStoredData(this.storageIds.switchPanel.avionics, avionics.toString())
+    SetStoredData(this.storageIds.switchPanel.pitotHeat, pitotHeat.toString())
   }
 
   persistState() {
@@ -106,10 +111,12 @@ class AC182RG extends BaseInstrument {
     var masterBattery = GetStoredData(this.storageIds.switchPanel.masterBattery)
     var alternator = GetStoredData(this.storageIds.switchPanel.alternator)
     var avionics = GetStoredData(this.storageIds.switchPanel.avionics)
+    var pitotHeat = GetStoredData(this.storageIds.switchPanel.pitotHeat)
 
     logger.log('applying master battery state', masterBattery)
     logger.log('applying alternator state', alternator)
     logger.log('applying avionics state', avionics)
+    logger.log('applying pitot heat state', pitotHeat)
 
     SimVar.SetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'number', Number(masterBattery))
     if (Number(alternator)) {
@@ -117,6 +124,9 @@ class AC182RG extends BaseInstrument {
     }
     if (Number(avionics)) {
       SimVar.SetSimVarValue('K:AVIONICS_MASTER_1_ON', 'number', 1)
+    }
+    if (Number(pitotHeat)) {
+      SimVar.SetSimVarValue('K:PITOT_HEAT_ON', 'number', 1)
     }
   }
 
