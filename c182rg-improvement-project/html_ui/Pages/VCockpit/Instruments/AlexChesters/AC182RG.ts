@@ -15,7 +15,11 @@ type AC182RGPersistentStorageIds = {
     masterBattery: string,
     alternator: string,
     avionics: string,
-    pitotHeat: string
+    pitotHeat: string,
+    navLight: string,
+    beaconLight: string,
+    taxiLight: string,
+    landingLight: string
   }
 }
 
@@ -41,7 +45,11 @@ class AC182RG extends BaseInstrument {
         masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
         alternator: `AC182RG_ALTERNATOR_${this.aircraftIdentifier}`,
         avionics: `AC182RG_AVIONICS_${this.aircraftIdentifier}`,
-        pitotHeat: `AC182RG_PITOT_${this.aircraftIdentifier}`
+        pitotHeat: `AC182RG_PITOT_${this.aircraftIdentifier}`,
+        navLight: `AC182RG_NAV_LIGHT_${this.aircraftIdentifier}`,
+        beaconLight: `AC182RG_BEACON_LIGHT_${this.aircraftIdentifier}`,
+        taxiLight: `AC182RG_TAXI_LIGHT_${this.aircraftIdentifier}`,
+        landingLight: `AC182RG_LANDING_LIGHT_${this.aircraftIdentifier}`
       }
     }
 
@@ -73,16 +81,28 @@ class AC182RG extends BaseInstrument {
     var alternator = SimVar.GetSimVarValue('GENERAL ENG MASTER ALTERNATOR:1', 'bool')
     var avionics = SimVar.GetSimVarValue('AVIONICS MASTER SWITCH', 'bool')
     var pitotHeat = SimVar.GetSimVarValue('PITOT HEAT SWITCH', 'bool')
+    var navLight = SimVar.GetSimVarValue('LIGHT NAV', 'bool')
+    var beaconLight = SimVar.GetSimVarValue('LIGHT BEACON', 'bool')
+    var taxiLight = SimVar.GetSimVarValue('LIGHT TAXI', 'bool')
+    var landingLight = SimVar.GetSimVarValue('LIGHT LANDING', 'bool')
     
     logger.debug('persisting master battery', masterBattery)
     logger.debug('persisting alternator', alternator)
     logger.debug('persisting avionics', avionics)
     logger.debug('persisting pitot heat', pitotHeat)
+    logger.debug('persisting nav light', navLight)
+    logger.debug('persisting beacon light', beaconLight)
+    logger.debug('persisting taxi light', taxiLight)
+    logger.debug('persisting landing light', landingLight)
 
     SetStoredData(this.storageIds.switchPanel.masterBattery, masterBattery.toString())
     SetStoredData(this.storageIds.switchPanel.alternator, alternator.toString())
     SetStoredData(this.storageIds.switchPanel.avionics, avionics.toString())
     SetStoredData(this.storageIds.switchPanel.pitotHeat, pitotHeat.toString())
+    SetStoredData(this.storageIds.switchPanel.navLight, navLight.toString())
+    SetStoredData(this.storageIds.switchPanel.beaconLight, beaconLight.toString())
+    SetStoredData(this.storageIds.switchPanel.taxiLight, taxiLight.toString())
+    SetStoredData(this.storageIds.switchPanel.landingLight, landingLight.toString())
   }
 
   persistState() {
@@ -112,11 +132,19 @@ class AC182RG extends BaseInstrument {
     var alternator = GetStoredData(this.storageIds.switchPanel.alternator)
     var avionics = GetStoredData(this.storageIds.switchPanel.avionics)
     var pitotHeat = GetStoredData(this.storageIds.switchPanel.pitotHeat)
+    var navLight = GetStoredData(this.storageIds.switchPanel.navLight)
+    var beaconLight = GetStoredData(this.storageIds.switchPanel.beaconLight)
+    var taxiLight = GetStoredData(this.storageIds.switchPanel.taxiLight)
+    var landingLight = GetStoredData(this.storageIds.switchPanel.landingLight)
 
     logger.log('applying master battery state', masterBattery)
     logger.log('applying alternator state', alternator)
     logger.log('applying avionics state', avionics)
     logger.log('applying pitot heat state', pitotHeat)
+    logger.log('applying nav light state', navLight)
+    logger.log('applying beacon light state', beaconLight)
+    logger.log('applying taxi light state', taxiLight)
+    logger.log('applying landing light state', landingLight)
 
     SimVar.SetSimVarValue('ELECTRICAL MASTER BATTERY:1', 'number', Number(masterBattery))
     if (Number(alternator)) {
@@ -127,6 +155,18 @@ class AC182RG extends BaseInstrument {
     }
     if (Number(pitotHeat)) {
       SimVar.SetSimVarValue('K:PITOT_HEAT_ON', 'number', 1)
+    }
+    if (Number(navLight)) {
+      SimVar.SetSimVarValue('K:NAV_LIGHTS_ON', 'number', 1)
+    }
+    if (Number(beaconLight)) {
+      SimVar.SetSimVarValue('K:BEACON_LIGHTS_ON', 'number', 1)
+    }
+    if (Number(taxiLight)) {
+      SimVar.SetSimVarValue('K:TAXI_LIGHTS_ON', 'number', 1)
+    }
+    if (Number(landingLight)) {
+      SimVar.SetSimVarValue('K:LANDING_LIGHTS_ON', 'number', 1)
     }
   }
 
