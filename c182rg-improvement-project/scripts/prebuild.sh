@@ -1,3 +1,3 @@
-set -euo pipefail
+set -e
 
 rm -rf build

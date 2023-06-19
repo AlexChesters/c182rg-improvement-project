@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
 
     steps:
       - name: checkout code
@@ -27,12 +27,14 @@ jobs:
         run: npm ci
       - name: build code
         run: npm run build
+      - name: rename build folder
+        run: Rename-Item -Path build -NewName c182rg-improvement-project
       - name: package code
-        run: npm run package
+        run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
       - name: assume-github-actions-role
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
           aws-region: eu-west-1
       - name: deploy
-        run: aws s3 cp ../c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project.zip --cache-control max-age=60
+        run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project.zip --cache-control max-age=60
