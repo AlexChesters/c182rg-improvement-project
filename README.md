@@ -8,7 +8,5 @@ mod to improve the Carenado C182RG for MSFS
 # current features
 * state saving
     * fuel levels
- 
-# planned features
-* state saving
-   * lights
+    * battery/alternator/avionics/pitot heat switches
+    * light switches
