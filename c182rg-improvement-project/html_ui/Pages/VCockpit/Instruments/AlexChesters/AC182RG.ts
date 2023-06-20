@@ -22,7 +22,8 @@ type AC182RGPersistentStorageIds = {
     landingLight: string
   },
   instruments: {
-    altimeter: string
+    altimeter: string,
+    headingBug: string
   }
 }
 
@@ -53,7 +54,8 @@ class AC182RG extends BaseInstrument {
         landingLight: `AC182RG_LANDING_LIGHT_${this.aircraftIdentifier}`
       },
       instruments: {
-        altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`
+        altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`,
+        headingBug: `AC182RG_HEADING_BUG_${this.aircraftIdentifier}`
       }
     }
 
@@ -109,10 +111,13 @@ class AC182RG extends BaseInstrument {
 
   persistInstrumentsState() {
     var altimeter = SimVar.GetSimVarValue('KOHLSMAN SETTING MB', 'millibars scaler 16')
+    var heading = SimVar.GetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees')
 
     logger.debug('persisting altimiter', altimeter)
+    logger.debug('persisting heading', heading)
 
     SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
+    SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
   }
 
   persistState() {
@@ -181,10 +186,13 @@ class AC182RG extends BaseInstrument {
 
   applyInstrumentState() {
     var altimeter = GetStoredData(this.storageIds.instruments.altimeter)
+    var heading = GetStoredData(this.storageIds.instruments.headingBug)
 
     logger.log('applying altimeter state', altimeter)
+    logger.log('applying heading state', heading)
 
     SimVar.SetSimVarValue('K:KOHLSMAN_SET', 'millibars scaler 16', Number(altimeter))
+    SimVar.SetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees', Number(heading))
   }
 
   applyState() {
