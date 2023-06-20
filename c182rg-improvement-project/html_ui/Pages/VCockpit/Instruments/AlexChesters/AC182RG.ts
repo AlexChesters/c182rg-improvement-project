@@ -20,6 +20,9 @@ type AC182RGPersistentStorageIds = {
     beaconLight: string,
     taxiLight: string,
     landingLight: string
+  },
+  instruments: {
+    altimeter: string
   }
 }
 
@@ -48,6 +51,9 @@ class AC182RG extends BaseInstrument {
         beaconLight: `AC182RG_BEACON_LIGHT_${this.aircraftIdentifier}`,
         taxiLight: `AC182RG_TAXI_LIGHT_${this.aircraftIdentifier}`,
         landingLight: `AC182RG_LANDING_LIGHT_${this.aircraftIdentifier}`
+      },
+      instruments: {
+        altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`
       }
     }
 
@@ -101,10 +107,19 @@ class AC182RG extends BaseInstrument {
     SetStoredData(this.storageIds.switchPanel.landingLight, landingLight.toString())
   }
 
+  persistInstrumentsState() {
+    var altimeter = SimVar.GetSimVarValue('KOHLSMAN SETTING MB', 'millibars scaler 16')
+
+    logger.debug('persisting altimiter', altimeter)
+
+    SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
+  }
+
   persistState() {
     try {
       this.persistFuelState()
       this.persistSwitchPanelState()
+      this.persistInstrumentsState()
     } catch (ex) {
       console.error('error persisting state', ex)
     }
@@ -164,9 +179,18 @@ class AC182RG extends BaseInstrument {
     }
   }
 
+  applyInstrumentState() {
+    var altimeter = GetStoredData(this.storageIds.instruments.altimeter)
+
+    logger.log('applying altimeter state', altimeter)
+
+    SimVar.SetSimVarValue('K:KOHLSMAN_SET', 'millibars scaler 16', Number(altimeter))
+  }
+
   applyState() {
     this.applyFuelState()
     this.applySwitchPanelState()
+    this.applyInstrumentState()
 
     setInterval(() => {
       this.persistState()
