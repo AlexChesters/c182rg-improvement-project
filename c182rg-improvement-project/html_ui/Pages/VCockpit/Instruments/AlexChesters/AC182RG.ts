@@ -28,6 +28,9 @@ type AC182RGPersistentStorageIds = {
   controlSurfaces: {
     rudderTrim: string,
     elevatorTrim: string
+  },
+  engines: {
+    cowlFlaps: string
   }
 }
 
@@ -64,6 +67,9 @@ class AC182RG extends BaseInstrument {
       controlSurfaces: {
         rudderTrim: `AC182RG_RUDDER_TRIM_${this.aircraftIdentifier}`,
         elevatorTrim: `AC182RG_ELEVATOR_TRIM_${this.aircraftIdentifier}`
+      },
+      engines: {
+        cowlFlaps: `AC182RG_COWL_FLAP_${this.aircraftIdentifier}`
       }
     }
 
@@ -139,12 +145,21 @@ class AC182RG extends BaseInstrument {
     SetStoredData(this.storageIds.controlSurfaces.elevatorTrim, elevatorTrim.toString())
   }
 
+  persistEngines() {
+    var cowlFlaps = SimVar.GetSimVarValue('RECIP ENG COWL FLAP POSITION:1', 'percent')
+
+    logger.debug('persisting cowl flaps', cowlFlaps)
+
+    SetStoredData(this.storageIds.engines.cowlFlaps, cowlFlaps.toString())
+  }
+
   persistState() {
     try {
       this.persistFuelState()
       this.persistSwitchPanelState()
       this.persistInstrumentsState()
       this.persistControlSurfaces()
+      this.persistEngines()
     } catch (ex) {
       console.error('error persisting state', ex)
     }
@@ -226,12 +241,21 @@ class AC182RG extends BaseInstrument {
     SimVar.SetSimVarValue('ELEVATOR TRIM POSITION', 'radians', Number(elevatorTrim))
   }
 
+  applyEngines() {
+    var cowlFlaps = GetStoredData(this.storageIds.engines.cowlFlaps)
+
+    logger.log('applying cowl flaps state', cowlFlaps)
+
+    SimVar.SetSimVarValue('RECIP ENG COWL FLAP POSITION:1', 'percent', Number(cowlFlaps))
+  }
+
   applyState() {
     try {
       this.applyFuelState()
       this.applySwitchPanelState()
       this.applyInstrumentState()
       this.applyControlSurfacesState()
+      this.applyEngines()
     } catch (ex) {
       console.error('error applying state', ex)
     }
