@@ -24,6 +24,10 @@ type AC182RGPersistentStorageIds = {
   instruments: {
     altimeter: string,
     headingBug: string
+  },
+  controlSurfaces: {
+    rudderTrim: string,
+    elevatorTrim: string
   }
 }
 
@@ -56,6 +60,10 @@ class AC182RG extends BaseInstrument {
       instruments: {
         altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`,
         headingBug: `AC182RG_HEADING_BUG_${this.aircraftIdentifier}`
+      },
+      controlSurfaces: {
+        rudderTrim: `AC182RG_RUDDER_TRIM_${this.aircraftIdentifier}`,
+        elevatorTrim: `AC182RG_ELEVATOR_TRIM_${this.aircraftIdentifier}`
       }
     }
 
@@ -120,11 +128,23 @@ class AC182RG extends BaseInstrument {
     SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
   }
 
+  persistControlSurfaces() {
+    var rudderTrim = SimVar.GetSimVarValue('RUDDER TRIM PCT', 'percent over 100')
+    var elevatorTrim = SimVar.GetSimVarValue('ELEVATOR TRIM POSITION', 'radians')
+
+    logger.debug('persisting rudder trim', rudderTrim)
+    logger.debug('persisting elevator trim', elevatorTrim)
+
+    SetStoredData(this.storageIds.controlSurfaces.rudderTrim, rudderTrim.toString())
+    SetStoredData(this.storageIds.controlSurfaces.elevatorTrim, elevatorTrim.toString())
+  }
+
   persistState() {
     try {
       this.persistFuelState()
       this.persistSwitchPanelState()
       this.persistInstrumentsState()
+      this.persistControlSurfaces()
     } catch (ex) {
       console.error('error persisting state', ex)
     }
@@ -195,10 +215,26 @@ class AC182RG extends BaseInstrument {
     SimVar.SetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees', Number(heading))
   }
 
+  applyControlSurfacesState() {
+    var rudderTrim = GetStoredData(this.storageIds.controlSurfaces.rudderTrim)
+    var elevatorTrim = GetStoredData(this.storageIds.controlSurfaces.elevatorTrim)
+
+    logger.log('applying rudder trim state', rudderTrim)
+    logger.log('applying elevator trim state', elevatorTrim)
+
+    SimVar.SetSimVarValue('RUDDER TRIM PCT', 'percent over 100', Number(rudderTrim))
+    SimVar.SetSimVarValue('ELEVATOR TRIM POSITION', 'radians', Number(elevatorTrim))
+  }
+
   applyState() {
-    this.applyFuelState()
-    this.applySwitchPanelState()
-    this.applyInstrumentState()
+    try {
+      this.applyFuelState()
+      this.applySwitchPanelState()
+      this.applyInstrumentState()
+      this.applyControlSurfacesState()
+    } catch (ex) {
+      console.error('error applying state', ex)
+    }
 
     setInterval(() => {
       this.persistState()
