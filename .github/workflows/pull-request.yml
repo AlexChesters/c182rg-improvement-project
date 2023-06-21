@@ -9,7 +9,7 @@ defaults:
     working-directory: c182rg-improvement-project
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: windows-latest
 
     steps:
