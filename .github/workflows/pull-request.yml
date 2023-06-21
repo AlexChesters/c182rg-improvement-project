@@ -1,0 +1,33 @@
+name: Pull request
+
+on:
+  pull_request:
+    branches: ["*"]
+
+defaults:
+  run:
+    working-directory: c182rg-improvement-project
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: set up node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: npm ci
+      - name: build code
+        run: npm run build
+      - name: include docs
+        run: Copy-Item -Path docs\README.txt -Destination README.txt
+      - name: rename build folder
+        run: Rename-Item -Path build -NewName c182rg-improvement-project
+      - name: package code
+        run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
+      - name: package docs
+        run: Compress-Archive -Path README.txt -Update -DestinationPath c182rg-improvement-project.zip
