@@ -34,6 +34,10 @@ c182rg-improvement-project/
     * fuel levels
     * battery/alternator/avionics/pitot heat switches
     * light switches
+    * cowl flaps
+    * heading bug
+    * elevator and rudder trim
+    * altimeter setting
 
 # Planned features
 Planned features can be found by looking at the
