@@ -1,4 +1,7 @@
 # c182rg-improvement-project
+[![Main](https://github.com/AlexChesters/c182rg-improvement-project/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/AlexChesters/c182rg-improvement-project/actions/workflows/main.yml)
+[![Release](https://github.com/AlexChesters/c182rg-improvement-project/actions/workflows/release.yml/badge.svg)](https://github.com/AlexChesters/c182rg-improvement-project/actions/workflows/release.yml)
+
 Mod to improve the Carenado C182RG for MSFS
 
 # Development version
