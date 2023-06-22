@@ -19,8 +19,8 @@ export default {
           dest: 'build'
         },
         {
-          src: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.html',
-          dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters'
+          src: 'html_ui',
+          dest: 'build'
         },
         {
           src: 'SimObjects',
