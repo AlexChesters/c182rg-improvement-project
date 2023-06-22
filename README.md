@@ -38,6 +38,7 @@ c182rg-improvement-project/
     * heading bug
     * elevator and rudder trim
     * altimeter setting
+    * transponder mode and code
 
 # Planned features
 Planned features can be found by looking at the
