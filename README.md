@@ -16,6 +16,9 @@ The latest version can be downloaded by visiting
 https://github.com/AlexChesters/c182rg-improvement-project/releases/latest, this page contains the latest release and
 the release body will contain a link to that version's `c182rg-improvement-project.zip` file.
 
+If you prefer you can also download this mod from
+[flightsim.to](https://flightsim.to/file/57009/c182rg-improvement-project)
+
 # Installation
 Regardless of which version you install the installation process is the same, just copy the `c182rg-improvement-project`
 from _inside_ the zip file you downloaded (not the unzipped folder itself) to your MSFS Community folder.
