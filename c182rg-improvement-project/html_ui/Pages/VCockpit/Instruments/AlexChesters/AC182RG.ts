@@ -23,7 +23,9 @@ type AC182RGPersistentStorageIds = {
   },
   instruments: {
     altimeter: string,
-    headingBug: string
+    headingBug: string,
+    transponderMode: string,
+    transponderCode: string
   },
   controlSurfaces: {
     rudderTrim: string,
@@ -62,7 +64,9 @@ class AC182RG extends BaseInstrument {
       },
       instruments: {
         altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`,
-        headingBug: `AC182RG_HEADING_BUG_${this.aircraftIdentifier}`
+        headingBug: `AC182RG_HEADING_BUG_${this.aircraftIdentifier}`,
+        transponderMode: `AC182RG_TRANSPONDER_MODE_${this.aircraftIdentifier}`,
+        transponderCode: `AC182RG_TRANSPONDER_CODE_${this.aircraftIdentifier}`
       },
       controlSurfaces: {
         rudderTrim: `AC182RG_RUDDER_TRIM_${this.aircraftIdentifier}`,
@@ -126,12 +130,18 @@ class AC182RG extends BaseInstrument {
   persistInstrumentsState() {
     var altimeter = SimVar.GetSimVarValue('KOHLSMAN SETTING MB', 'millibars scaler 16')
     var heading = SimVar.GetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees')
+    var transponderMode = SimVar.GetSimVarValue('TRANSPONDER STATE:1', 'Enum')
+    var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'mask')
 
     logger.debug('persisting altimiter', altimeter)
     logger.debug('persisting heading', heading)
+    logger.debug('persisting transponder mode', transponderMode)
+    logger.debug('persisting transponder code', transponderCode)
 
     SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
     SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
+    SetStoredData(this.storageIds.instruments.transponderMode, transponderMode.toString())
+    SetStoredData(this.storageIds.instruments.transponderCode, transponderCode.toString())
   }
 
   persistControlSurfaces() {
@@ -222,12 +232,18 @@ class AC182RG extends BaseInstrument {
   applyInstrumentState() {
     var altimeter = GetStoredData(this.storageIds.instruments.altimeter)
     var heading = GetStoredData(this.storageIds.instruments.headingBug)
+    var transponderMode = GetStoredData(this.storageIds.instruments.transponderMode)
+    var transponderCode = GetStoredData(this.storageIds.instruments.transponderCode)
 
     logger.log('applying altimeter state', altimeter)
     logger.log('applying heading state', heading)
+    logger.log('applying transponder mode state', transponderMode)
+    logger.log('applying transponder code state', transponderCode)
 
     SimVar.SetSimVarValue('K:KOHLSMAN_SET', 'millibars scaler 16', Number(altimeter))
     SimVar.SetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees', Number(heading))
+    SimVar.SetSimVarValue('TRANSPONDER STATE:1', 'Enum', Number(transponderMode || 0))
+    SimVar.SetSimVarValue('TRANSPONDER CODE:1', 'mask', Number(transponderCode || 7000))
   }
 
   applyControlSurfacesState() {

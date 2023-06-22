@@ -1,4 +1,4 @@
-const debugMode = false
+const debugMode = true
 
 export default {
   log: (...msg: any) => {
