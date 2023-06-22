@@ -131,7 +131,7 @@ class AC182RG extends BaseInstrument {
     var altimeter = SimVar.GetSimVarValue('KOHLSMAN SETTING MB', 'millibars scaler 16')
     var heading = SimVar.GetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees')
     var transponderMode = SimVar.GetSimVarValue('TRANSPONDER STATE:1', 'Enum')
-    var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'mask')
+    var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'Bco16')
 
     logger.debug('persisting altimiter', altimeter)
     logger.debug('persisting heading', heading)
@@ -243,7 +243,7 @@ class AC182RG extends BaseInstrument {
     SimVar.SetSimVarValue('K:KOHLSMAN_SET', 'millibars scaler 16', Number(altimeter))
     SimVar.SetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees', Number(heading))
     SimVar.SetSimVarValue('TRANSPONDER STATE:1', 'Enum', Number(transponderMode || 0))
-    SimVar.SetSimVarValue('TRANSPONDER CODE:1', 'mask', Number(transponderCode || 7000))
+    SimVar.SetSimVarValue('TRANSPONDER CODE:1', 'Bco16', Number(transponderCode || 7000))
   }
 
   applyControlSurfacesState() {
