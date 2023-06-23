@@ -29,7 +29,8 @@ type AC182RGPersistentStorageIds = {
   },
   controlSurfaces: {
     rudderTrim: string,
-    elevatorTrim: string
+    elevatorTrim: string,
+    flaps: string
   },
   engines: {
     cowlFlaps: string
@@ -70,7 +71,8 @@ class AC182RG extends BaseInstrument {
       },
       controlSurfaces: {
         rudderTrim: `AC182RG_RUDDER_TRIM_${this.aircraftIdentifier}`,
-        elevatorTrim: `AC182RG_ELEVATOR_TRIM_${this.aircraftIdentifier}`
+        elevatorTrim: `AC182RG_ELEVATOR_TRIM_${this.aircraftIdentifier}`,
+        flaps: `AC182RG_FLAPS_${this.aircraftIdentifier}`
       },
       engines: {
         cowlFlaps: `AC182RG_COWL_FLAP_${this.aircraftIdentifier}`
@@ -132,16 +134,19 @@ class AC182RG extends BaseInstrument {
     var heading = SimVar.GetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees')
     var transponderMode = SimVar.GetSimVarValue('TRANSPONDER STATE:1', 'Enum')
     var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'Bco16')
+    var flaps = SimVar.GetSimVarValue('FLAPS HANDLE INDEX', 'number')
 
     logger.debug('persisting altimiter', altimeter)
     logger.debug('persisting heading', heading)
     logger.debug('persisting transponder mode', transponderMode)
     logger.debug('persisting transponder code', transponderCode)
+    logger.debug('persisting flaps', flaps)
 
     SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
     SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
     SetStoredData(this.storageIds.instruments.transponderMode, transponderMode.toString())
     SetStoredData(this.storageIds.instruments.transponderCode, transponderCode.toString())
+    SetStoredData(this.storageIds.controlSurfaces.flaps, flaps.toString())
   }
 
   persistControlSurfaces() {
@@ -249,12 +254,15 @@ class AC182RG extends BaseInstrument {
   applyControlSurfacesState() {
     var rudderTrim = GetStoredData(this.storageIds.controlSurfaces.rudderTrim)
     var elevatorTrim = GetStoredData(this.storageIds.controlSurfaces.elevatorTrim)
+    var flaps = GetStoredData(this.storageIds.controlSurfaces.flaps)
 
     logger.log('applying rudder trim state', rudderTrim)
     logger.log('applying elevator trim state', elevatorTrim)
+    logger.log('applying flaps state', flaps)
 
     SimVar.SetSimVarValue('RUDDER TRIM PCT', 'percent over 100', Number(rudderTrim))
     SimVar.SetSimVarValue('ELEVATOR TRIM POSITION', 'radians', Number(elevatorTrim))
+    SimVar.SetSimVarValue('FLAPS HANDLE INDEX', 'number', Number(flaps))
   }
 
   applyEngines() {
