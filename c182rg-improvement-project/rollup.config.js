@@ -3,8 +3,8 @@ import copy from 'rollup-plugin-copy'
 import mv from 'rollup-plugin-mv'
 import typescript from '@rollup/plugin-typescript'
 
-export default {
-  input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.ts',
+const stateSaving = {
+  input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.ts',
   output: {
     dir: 'build',
     format: 'es'
@@ -19,8 +19,8 @@ export default {
           dest: 'build'
         },
         {
-          src: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.html',
-          dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters'
+          src: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.html',
+          dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving'
         },
         {
           src: 'SimObjects',
@@ -31,8 +31,10 @@ export default {
     mv([
       {
         src: 'build/AC182RG.js',
-        dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/AC182RG.js'
+        dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.js'
       }
     ])
   ]
 }
+
+export default [stateSaving]

@@ -4,7 +4,7 @@
 /// <reference types='@microsoft/msfs-types/JS/SimVar' />
 /// <reference types='@microsoft/msfs-types/js/common' />
 
-import logger from './utils/logger'
+import logger from '../utils/logger'
 
 type AC182RGPersistentStorageIds = {
   fuel: {
