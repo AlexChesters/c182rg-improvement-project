@@ -168,6 +168,7 @@ class KAP140 extends BaseInstrument {
         var avionics = SimVar.GetSimVarValue('AVIONICS MASTER SWITCH', 'bool')
         if (!Number(avionics)) {
             this.HideEveryDisplay();
+            this.bAvionicsPowerOn = false;
             return;
         }
 
