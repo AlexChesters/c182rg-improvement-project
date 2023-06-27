@@ -37,4 +37,23 @@ const stateSaving = {
   ]
 }
 
-export default [stateSaving]
+const kap140 = {
+  input: 'html_ui/Pages/VCockpit/Instruments/NavSystems/Carenado/KAP140/KAP140.js',
+  output: {
+    dir: 'build',
+    format: 'es'
+  },
+  plugins: [
+    resolve(),
+    typescript(),
+    mv([
+      {
+        src: 'build/KAP140.js',
+        dest: 'build/html_ui/Pages/VCockpit/Instruments/NavSystems/Carenado/KAP140/KAP140.js'
+      }
+    ])
+  ]
+}
+
+export default [stateSaving, kap140]
+
