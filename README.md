@@ -42,6 +42,9 @@ c182rg-improvement-project/
     * elevator and rudder trim
     * altimeter setting
     * transponder mode and code
+    * flaps
+* bug fixes from non-modded plane
+    * autopilot panel now requires avionics to be turned on
 
 # Planned features
 Planned features can be found by looking at the
