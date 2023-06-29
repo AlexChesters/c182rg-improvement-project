@@ -40,7 +40,17 @@ type AC182RGPersistentStorageIds = {
     cowlFlaps: string
   },
   tablet: {
-    staticElements: string
+    tabletPage: string,
+    staticElements: string,
+    externalPower: string,
+    towCar: string,
+    pilotDoor: string,
+    copilotDoor: string,
+    baggageDoor: string
+  },
+  windows: {
+    pilotWindow: string,
+    copilotWindow: string
   }
 }
 
@@ -87,7 +97,17 @@ class AC182RG extends BaseInstrument {
         cowlFlaps: `AC182RG_COWL_FLAP_${this.aircraftIdentifier}`
       },
       tablet: {
-        staticElements: `AC182RG_STATIC_ELEMENTS_${this.aircraftIdentifier}`
+        tabletPage: `AC182RG_TABLET_PAGE_${this.aircraftIdentifier}`,
+        staticElements: `AC182RG_STATIC_ELEMENTS_${this.aircraftIdentifier}`,
+        externalPower: `AC182RG_EXTERNAL_POWER_${this.aircraftIdentifier}`,
+        towCar: `AC128RG_TOW_CAR_${this.aircraftIdentifier}`,
+        pilotDoor: `AC182RG_PILOT_DOOR_${this.aircraftIdentifier}`,
+        copilotDoor: `AC182RG_COPILOT_DOOR_${this.aircraftIdentifier}`,
+        baggageDoor: `AC182RG_BAGGAGE_DOOR_${this.aircraftIdentifier}`
+      },
+      windows: {
+        pilotWindow: `AC182RG_PILOT_WINDOW_${this.aircraftIdentifier}`,
+        copilotWindow: `AC182RG_COPILOT_WINDOW_${this.aircraftIdentifier}`
       }
     }
 
@@ -187,11 +207,40 @@ class AC182RG extends BaseInstrument {
   }
 
   persistTablet() {
+    var tabletPage = SimVar.GetSimVarValue('L:TABLET_PAG', 'number')
     var staticElements = SimVar.GetSimVarValue('L:TABLET_BTN_STATIC_ELEMENT', 'bool')
+    var externalPower = SimVar.GetSimVarValue('L:TABLET_BTN_EXT_PWR', 'bool')
+    var towCar = SimVar.GetSimVarValue('L:TABLET_BTN_TOW_CAR', 'bool')
+    var pilotDoor = SimVar.GetSimVarValue('EXIT OPEN:0', 'percent over 100')
+    var copilotDoor = SimVar.GetSimVarValue('EXIT OPEN:1', 'percent over 100')
+    var baggageDoor = SimVar.GetSimVarValue('EXIT OPEN:4', 'percent over 100')
 
+    logger.debug('persisting tablet page', tabletPage)
     logger.debug('persisting static elements', staticElements)
+    logger.debug('persisting external power', externalPower)
+    logger.debug('persisting tow car', towCar)
+    logger.debug('persisting pilot door', pilotDoor)
+    logger.debug('persisting copilot door', copilotDoor)
+    logger.debug('persisting baggage door', baggageDoor)
 
+    SetStoredData(this.storageIds.tablet.tabletPage, tabletPage.toString())
     SetStoredData(this.storageIds.tablet.staticElements, staticElements.toString())
+    SetStoredData(this.storageIds.tablet.externalPower, externalPower.toString())
+    SetStoredData(this.storageIds.tablet.towCar, towCar.toString())
+    SetStoredData(this.storageIds.tablet.pilotDoor, pilotDoor.toString())
+    SetStoredData(this.storageIds.tablet.copilotDoor, copilotDoor.toString())
+    SetStoredData(this.storageIds.tablet.baggageDoor, baggageDoor.toString())
+  }
+
+  persistWindows() {
+    var pilotWindow = SimVar.GetSimVarValue('EXIT OPEN:2', 'percent over 100')
+    var copilotWindow = SimVar.GetSimVarValue('EXIT OPEN:3', 'percent over 100')
+
+    logger.debug('persisting pilot window', pilotWindow)
+    logger.debug('persisting copilot window', copilotWindow)
+
+    SetStoredData(this.storageIds.windows.pilotWindow, pilotWindow.toString())
+    SetStoredData(this.storageIds.windows.copilotWindow, copilotWindow.toString())
   }
 
   persistState() {
@@ -202,6 +251,7 @@ class AC182RG extends BaseInstrument {
       this.persistControlSurfaces()
       this.persistEngines()
       this.persistTablet()
+      this.persistWindows()
     } catch (ex) {
       console.error('error persisting state', ex)
     }
@@ -307,11 +357,63 @@ class AC182RG extends BaseInstrument {
   }
 
   applyTablet() {
+    var tabletPage = GetStoredData(this.storageIds.tablet.tabletPage)
     var staticElements = GetStoredData(this.storageIds.tablet.staticElements)
+    var externalPower = GetStoredData(this.storageIds.tablet.externalPower)
+    var towCar = GetStoredData(this.storageIds.tablet.towCar)
+    var pilotDoor = GetStoredData(this.storageIds.tablet.pilotDoor)
+    var copilotDoor = GetStoredData(this.storageIds.tablet.copilotDoor)
+    var baggageDoor = GetStoredData(this.storageIds.tablet.baggageDoor)
 
+    logger.log('applying tablet page state', tabletPage)
     logger.log('applying static elements state', staticElements)
+    logger.log('applying external power state', externalPower)
+    logger.log('applying tow car state', towCar)
+    logger.log('applying pilot door state', pilotDoor)
+    logger.log('applying copilot door state', copilotDoor)
+    logger.log('applying baggage door state', baggageDoor)
 
+    SimVar.SetSimVarValue('L:TABLET_PAG', 'number', Number(tabletPage))
     SimVar.SetSimVarValue('L:TABLET_BTN_STATIC_ELEMENT', 'bool', Number(staticElements))
+    SimVar.SetSimVarValue('L:TABLET_BTN_EXT_PWR', 'bool', Number(externalPower))
+    SimVar.SetSimVarValue('L:TABLET_BTN_TOW_CAR', 'bool', Number(towCar))
+    SimVar.SetSimVarValue('EXIT OPEN:0', 'percent over 100', Number(pilotDoor))
+    SimVar.SetSimVarValue('L:TABLET_BTN_PILOT_DOOR', 'bool', Number(pilotDoor))
+    var currentPilotDoorState = SimVar.GetSimVarValue('EXIT OPEN:0', 'percent over 100')
+    if (Number(currentPilotDoorState) !== Number(pilotDoor)) {
+      SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 1)
+    }
+    SimVar.SetSimVarValue('EXIT OPEN:1', 'percent over 100', Number(copilotDoor))
+    SimVar.SetSimVarValue('L:TABLET_BTN_COPILOT_DOOR', 'bool', Number(copilotDoor))
+    var currentCopilotDoorState = SimVar.GetSimVarValue('EXIT OPEN:1', 'percent over 100')
+    if (Number(currentCopilotDoorState) !== Number(copilotDoor)) {
+      SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 2)
+    }
+    SimVar.SetSimVarValue('EXIT OPEN:4', 'percent over 100', Number(baggageDoor))
+    SimVar.SetSimVarValue('L:TABLET_BTN_BAGAGE_DOOR', 'bool', Number(baggageDoor))
+    var currentBaggageDoorState = SimVar.GetSimVarValue('EXIT OPEN:4', 'percent over 100')
+    if (Number(currentBaggageDoorState) !== Number(baggageDoor)) {
+      SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 5)
+    }
+  }
+  
+  applyWindows() {
+    var pilotWindow = GetStoredData(this.storageIds.windows.pilotWindow)
+    var copilotWindow = GetStoredData(this.storageIds.windows.copilotWindow)
+    
+    logger.log('applying pilot window state', pilotWindow)
+    logger.log('applying copilot window state', copilotWindow)
+    
+    SimVar.SetSimVarValue('EXIT OPEN:2', 'percent over 100', Number(pilotWindow))
+    var currentPilotWindowState = SimVar.GetSimVarValue('EXIT OPEN:2', 'percent over 100')
+    if (Number(currentPilotWindowState) !== Number(pilotWindow)) {
+      SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 3)
+    }
+    SimVar.SetSimVarValue('EXIT OPEN:3', 'percent over 100', Number(copilotWindow))
+    var currentCopilotWindowState = SimVar.GetSimVarValue('EXIT OPEN:3', 'percent over 100')
+    if (Number(currentCopilotWindowState) !== Number(copilotWindow)) {
+      SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 4)
+    }
   }
 
   applyState() {
@@ -322,6 +424,7 @@ class AC182RG extends BaseInstrument {
       this.applyControlSurfacesState()
       this.applyEngines()
       this.applyTablet()
+      this.applyWindows()
     } catch (ex) {
       console.error('error applying state', ex)
     }
