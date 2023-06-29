@@ -6,12 +6,6 @@
 
 import logger from '../utils/logger'
 
-enum GPS {
-  NXi = 'nxi',
-  GTN = 'gtn',
-  GNS = 'gns'
-}
-
 type AC182RGPersistentStorageIds = {
   fuel: {
     leftTankVolume: string,
@@ -52,8 +46,7 @@ type AC182RGPersistentStorageIds = {
     towCar: string,
     pilotDoor: string,
     copilotDoor: string,
-    baggageDoor: string,
-    gps: string
+    baggageDoor: string
   },
   windows: {
     pilotWindow: string,
@@ -110,8 +103,7 @@ class AC182RG extends BaseInstrument {
         towCar: `AC128RG_TOW_CAR_${this.aircraftIdentifier}`,
         pilotDoor: `AC182RG_PILOT_DOOR_${this.aircraftIdentifier}`,
         copilotDoor: `AC182RG_COPILOT_DOOR_${this.aircraftIdentifier}`,
-        baggageDoor: `AC182RG_BAGGAGE_DOOR_${this.aircraftIdentifier}`,
-        gps: `AC182RG_GPS_${this.aircraftIdentifier}`
+        baggageDoor: `AC182RG_BAGGAGE_DOOR_${this.aircraftIdentifier}`
       },
       windows: {
         pilotWindow: `AC182RG_PILOT_WINDOW_${this.aircraftIdentifier}`,
@@ -222,9 +214,6 @@ class AC182RG extends BaseInstrument {
     var pilotDoor = SimVar.GetSimVarValue('EXIT OPEN:0', 'percent over 100')
     var copilotDoor = SimVar.GetSimVarValue('EXIT OPEN:1', 'percent over 100')
     var baggageDoor = SimVar.GetSimVarValue('EXIT OPEN:4', 'percent over 100')
-    var nxiHidden = SimVar.GetSimVarValue('L:CARENADO_GTN750XI_HIDDEN', 'bool')
-    var gtnHidden = SimVar.GetSimVarValue('L:CARENADO_GTN750_HIDDEN', 'bool')
-    var gnsHidden = SimVar.GetSimVarValue('L:CARENADO_GNS430530_HIDDEN', 'bool')
 
     logger.debug('persisting tablet page', tabletPage)
     logger.debug('persisting static elements', staticElements)
@@ -233,9 +222,6 @@ class AC182RG extends BaseInstrument {
     logger.debug('persisting pilot door', pilotDoor)
     logger.debug('persisting copilot door', copilotDoor)
     logger.debug('persisting baggage door', baggageDoor)
-    logger.debug('persisting nxi', nxiHidden)
-    logger.debug('persisting gtn', gtnHidden)
-    logger.debug('persisting gns', gnsHidden)
 
     SetStoredData(this.storageIds.tablet.tabletPage, tabletPage.toString())
     SetStoredData(this.storageIds.tablet.staticElements, staticElements.toString())
@@ -244,14 +230,6 @@ class AC182RG extends BaseInstrument {
     SetStoredData(this.storageIds.tablet.pilotDoor, pilotDoor.toString())
     SetStoredData(this.storageIds.tablet.copilotDoor, copilotDoor.toString())
     SetStoredData(this.storageIds.tablet.baggageDoor, baggageDoor.toString())
-    
-    if (!Number(nxiHidden)) {
-      SetStoredData(this.storageIds.tablet.gps, GPS.NXi)
-    } else if (!Number(gtnHidden)) {
-      SetStoredData(this.storageIds.tablet.gps, GPS.GTN)
-    } else if (!Number(gnsHidden)) {
-      SetStoredData(this.storageIds.tablet.gps, GPS.GNS)
-    }
   }
 
   persistWindows() {
@@ -386,7 +364,6 @@ class AC182RG extends BaseInstrument {
     var pilotDoor = GetStoredData(this.storageIds.tablet.pilotDoor)
     var copilotDoor = GetStoredData(this.storageIds.tablet.copilotDoor)
     var baggageDoor = GetStoredData(this.storageIds.tablet.baggageDoor)
-    var gps = GetStoredData(this.storageIds.tablet.gps)
 
     logger.log('applying tablet page state', tabletPage)
     logger.log('applying static elements state', staticElements)
@@ -395,7 +372,6 @@ class AC182RG extends BaseInstrument {
     logger.log('applying pilot door state', pilotDoor)
     logger.log('applying copilot door state', copilotDoor)
     logger.log('applying baggage door state', baggageDoor)
-    logger.log('applying gps state', gps)
 
     SimVar.SetSimVarValue('L:TABLET_PAG', 'number', Number(tabletPage))
     SimVar.SetSimVarValue('L:TABLET_BTN_STATIC_ELEMENT', 'bool', Number(staticElements))
@@ -418,27 +394,6 @@ class AC182RG extends BaseInstrument {
     var currentBaggageDoorState = SimVar.GetSimVarValue('EXIT OPEN:4', 'percent over 100')
     if (Number(currentBaggageDoorState) !== Number(baggageDoor)) {
       SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT_FAST', 'number', 5)
-    }
-    switch (gps) {
-      case GPS.NXi:
-        SimVar.SetSimVarValue('L:CARENADO_GTN750XI_HIDDEN', 'bool', 0)
-        SimVar.SetSimVarValue('L:CARENADO_GTN750_ENABLED_BUTTON', 'bool', 0)
-        SimVar.SetSimVarValue('L:GTNXION_REMOVE_FLTPLAN', 'number', 0)
-        SimVar.SetSimVarValue('L:CARENADO_GTN750_HIDDEN', 'bool', 1)
-        SimVar.SetSimVarValue('L:CARENADO_GNS430530_HIDDEN', 'bool', 1)
-        break
-        case GPS.GTN:
-          SimVar.SetSimVarValue('L:CARENADO_GTN750XI_HIDDEN', 'bool', 1)
-          SimVar.SetSimVarValue('L:CARENADO_GTN750_ENABLED_BUTTON', 'bool', 1)
-          SimVar.SetSimVarValue('L:CARENADO_GTN750_HIDDEN', 'bool', 0)
-          SimVar.SetSimVarValue('L:CARENADO_GNS430530_HIDDEN', 'bool', 1)
-          break
-          case GPS.GNS:
-        SimVar.SetSimVarValue('L:CARENADO_GTN750XI_HIDDEN', 'bool', 1)
-        SimVar.SetSimVarValue('L:CARENADO_GTN750_ENABLED_BUTTON', 'bool', 1)
-        SimVar.SetSimVarValue('L:CARENADO_GTN750_HIDDEN', 'bool', 1)
-        SimVar.SetSimVarValue('L:CARENADO_GNS430530_HIDDEN', 'bool', 0)
-        break
     }
   }
   
