@@ -41,4 +41,4 @@ jobs:
           role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
           aws-region: eu-west-1
       - name: deploy
-        run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/latest/c182rg-improvement-project.zip --cache-control max-age=60
+        run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/development/c182rg-improvement-project.zip --cache-control max-age=60

@@ -9,7 +9,7 @@ The development version is the latest (and therefore potentially unstable) versi
 should expect to encounter bugs.
 
 The development version can be downloaded from
-https://projects.alexchesters.com/c182rg-improvement-project/latest/c182rg-improvement-project.zip
+https://projects.alexchesters.com/c182rg-improvement-project/development/c182rg-improvement-project.zip
 
 # Latest version
 The latest version can be downloaded by visiting
