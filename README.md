@@ -52,3 +52,6 @@ Planned features can be found by looking at the
 [issues](https://github.com/AlexChesters/c182rg-improvement-project/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
 on this repository. If you have a feature you'd like to see please do
 [raise an issue](https://github.com/AlexChesters/c182rg-improvement-project/issues/new).
+
+# Donations
+Donations are incredibly appreciated but not necessary. If you would like to leave a donation to support this project you can do so by visiting https://www.buymeacoffee.com/alexchesters.
