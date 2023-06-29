@@ -30,7 +30,11 @@ type AC182RGPersistentStorageIds = {
   controlSurfaces: {
     rudderTrim: string,
     elevatorTrim: string,
-    flaps: string
+    // flap handle index
+    flaps: string,
+    // actual flap positions
+    flapsLeftPercent: string,
+    flapsRightPercent: string
   },
   engines: {
     cowlFlaps: string
@@ -72,7 +76,9 @@ class AC182RG extends BaseInstrument {
       controlSurfaces: {
         rudderTrim: `AC182RG_RUDDER_TRIM_${this.aircraftIdentifier}`,
         elevatorTrim: `AC182RG_ELEVATOR_TRIM_${this.aircraftIdentifier}`,
-        flaps: `AC182RG_FLAPS_${this.aircraftIdentifier}`
+        flaps: `AC182RG_FLAPS_${this.aircraftIdentifier}`,
+        flapsLeftPercent: `AC182RG_FLAPS_LEFT_PERCENT_${this.aircraftIdentifier}`,
+        flapsRightPercent: `AC182RG_FLAPS_RIGHT_PERCENT_${this.aircraftIdentifier}`
       },
       engines: {
         cowlFlaps: `AC182RG_COWL_FLAP_${this.aircraftIdentifier}`
@@ -135,18 +141,24 @@ class AC182RG extends BaseInstrument {
     var transponderMode = SimVar.GetSimVarValue('TRANSPONDER STATE:1', 'Enum')
     var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'Bco16')
     var flaps = SimVar.GetSimVarValue('FLAPS HANDLE INDEX', 'number')
+    var flapsLeftPercent = SimVar.GetSimVarValue('TRAILING EDGE FLAPS LEFT PERCENT', 'percent over 100')
+    var flapsRightPercent = SimVar.GetSimVarValue('TRAILING EDGE FLAPS RIGHT PERCENT', 'percent over 100')
 
     logger.debug('persisting altimiter', altimeter)
     logger.debug('persisting heading', heading)
     logger.debug('persisting transponder mode', transponderMode)
     logger.debug('persisting transponder code', transponderCode)
     logger.debug('persisting flaps', flaps)
+    logger.debug('persisting flaps left percent', flapsLeftPercent)
+    logger.debug('persisting flaps right percent', flapsRightPercent)
 
     SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
     SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
     SetStoredData(this.storageIds.instruments.transponderMode, transponderMode.toString())
     SetStoredData(this.storageIds.instruments.transponderCode, transponderCode.toString())
     SetStoredData(this.storageIds.controlSurfaces.flaps, flaps.toString())
+    SetStoredData(this.storageIds.controlSurfaces.flapsLeftPercent, flapsLeftPercent.toString())
+    SetStoredData(this.storageIds.controlSurfaces.flapsRightPercent, flapsRightPercent.toString())
   }
 
   persistControlSurfaces() {
@@ -255,14 +267,20 @@ class AC182RG extends BaseInstrument {
     var rudderTrim = GetStoredData(this.storageIds.controlSurfaces.rudderTrim)
     var elevatorTrim = GetStoredData(this.storageIds.controlSurfaces.elevatorTrim)
     var flaps = GetStoredData(this.storageIds.controlSurfaces.flaps)
+    var flapsLeftPercent = GetStoredData(this.storageIds.controlSurfaces.flapsLeftPercent)
+    var flapsRightPercent = GetStoredData(this.storageIds.controlSurfaces.flapsRightPercent)
 
     logger.log('applying rudder trim state', rudderTrim)
     logger.log('applying elevator trim state', elevatorTrim)
     logger.log('applying flaps state', flaps)
+    logger.log('applying flaps left percent state', flapsLeftPercent)
+    logger.log('applying flaps right percent state', flapsRightPercent)
 
     SimVar.SetSimVarValue('RUDDER TRIM PCT', 'percent over 100', Number(rudderTrim))
     SimVar.SetSimVarValue('ELEVATOR TRIM POSITION', 'radians', Number(elevatorTrim))
     SimVar.SetSimVarValue('FLAPS HANDLE INDEX', 'number', Number(flaps))
+    SimVar.SetSimVarValue('TRAILING EDGE FLAPS LEFT PERCENT', 'percent over 100', Number(flapsLeftPercent))
+    SimVar.SetSimVarValue('TRAILING EDGE FLAPS RIGHT PERCENT', 'percent over 100', Number(flapsRightPercent))
   }
 
   applyEngines() {
