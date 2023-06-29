@@ -38,6 +38,9 @@ type AC182RGPersistentStorageIds = {
   },
   engines: {
     cowlFlaps: string
+  },
+  tablet: {
+    staticElements: string
   }
 }
 
@@ -82,6 +85,9 @@ class AC182RG extends BaseInstrument {
       },
       engines: {
         cowlFlaps: `AC182RG_COWL_FLAP_${this.aircraftIdentifier}`
+      },
+      tablet: {
+        staticElements: `AC182RG_STATIC_ELEMENTS_${this.aircraftIdentifier}`
       }
     }
 
@@ -180,6 +186,14 @@ class AC182RG extends BaseInstrument {
     SetStoredData(this.storageIds.engines.cowlFlaps, cowlFlaps.toString())
   }
 
+  persistTablet() {
+    var staticElements = SimVar.GetSimVarValue('L:TABLET_BTN_STATIC_ELEMENT', 'bool')
+
+    logger.debug('persisting static elements', staticElements)
+
+    SetStoredData(this.storageIds.tablet.staticElements, staticElements.toString())
+  }
+
   persistState() {
     try {
       this.persistFuelState()
@@ -187,6 +201,7 @@ class AC182RG extends BaseInstrument {
       this.persistInstrumentsState()
       this.persistControlSurfaces()
       this.persistEngines()
+      this.persistTablet()
     } catch (ex) {
       console.error('error persisting state', ex)
     }
@@ -291,6 +306,14 @@ class AC182RG extends BaseInstrument {
     SimVar.SetSimVarValue('RECIP ENG COWL FLAP POSITION:1', 'percent', Number(cowlFlaps))
   }
 
+  applyTablet() {
+    var staticElements = GetStoredData(this.storageIds.tablet.staticElements)
+
+    logger.log('applying static elements state', staticElements)
+
+    SimVar.SetSimVarValue('L:TABLET_BTN_STATIC_ELEMENT', 'bool', Number(staticElements))
+  }
+
   applyState() {
     try {
       this.applyFuelState()
@@ -298,6 +321,7 @@ class AC182RG extends BaseInstrument {
       this.applyInstrumentState()
       this.applyControlSurfacesState()
       this.applyEngines()
+      this.applyTablet()
     } catch (ex) {
       console.error('error applying state', ex)
     }
