@@ -24,6 +24,8 @@ type AC182RGPersistentStorageIds = {
   instruments: {
     altimeter: string,
     headingBug: string,
+    courseBug: string,
+    obsBug: string,
     transponderMode: string,
     transponderCode: string
   },
@@ -83,6 +85,8 @@ class AC182RG extends BaseInstrument {
       instruments: {
         altimeter: `AC182RG_ALTIMETER_${this.aircraftIdentifier}`,
         headingBug: `AC182RG_HEADING_BUG_${this.aircraftIdentifier}`,
+        courseBug: `AC182RG_COURSE_BUG_${this.aircraftIdentifier}`,
+        obsBug: `AC182RG_OBS_BUG_${this.aircraftIdentifier}`,
         transponderMode: `AC182RG_TRANSPONDER_MODE_${this.aircraftIdentifier}`,
         transponderCode: `AC182RG_TRANSPONDER_CODE_${this.aircraftIdentifier}`
       },
@@ -164,6 +168,8 @@ class AC182RG extends BaseInstrument {
   persistInstrumentsState() {
     var altimeter = SimVar.GetSimVarValue('KOHLSMAN SETTING MB', 'millibars scaler 16')
     var heading = SimVar.GetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees')
+    var course = SimVar.GetSimVarValue('NAV OBS:1', 'degrees')
+    var obs = SimVar.GetSimVarValue('NAV OBS:2', 'degrees')
     var transponderMode = SimVar.GetSimVarValue('TRANSPONDER STATE:1', 'Enum')
     var transponderCode = SimVar.GetSimVarValue('TRANSPONDER CODE:1', 'Bco16')
     var flaps = SimVar.GetSimVarValue('FLAPS HANDLE INDEX', 'number')
@@ -172,6 +178,8 @@ class AC182RG extends BaseInstrument {
 
     logger.debug('persisting altimiter', altimeter)
     logger.debug('persisting heading', heading)
+    logger.debug('persisting course', course)
+    logger.debug('persisting obs', obs)
     logger.debug('persisting transponder mode', transponderMode)
     logger.debug('persisting transponder code', transponderCode)
     logger.debug('persisting flaps', flaps)
@@ -180,6 +188,8 @@ class AC182RG extends BaseInstrument {
 
     SetStoredData(this.storageIds.instruments.altimeter, altimeter.toString())
     SetStoredData(this.storageIds.instruments.headingBug, heading.toString())
+    SetStoredData(this.storageIds.instruments.courseBug, course.toString())
+    SetStoredData(this.storageIds.instruments.obsBug, obs.toString())
     SetStoredData(this.storageIds.instruments.transponderMode, transponderMode.toString())
     SetStoredData(this.storageIds.instruments.transponderCode, transponderCode.toString())
     SetStoredData(this.storageIds.controlSurfaces.flaps, flaps.toString())
@@ -314,16 +324,24 @@ class AC182RG extends BaseInstrument {
   applyInstrumentState() {
     var altimeter = GetStoredData(this.storageIds.instruments.altimeter)
     var heading = GetStoredData(this.storageIds.instruments.headingBug)
+    var course = GetStoredData(this.storageIds.instruments.courseBug)
+    var obs = GetStoredData(this.storageIds.instruments.obsBug)
     var transponderMode = GetStoredData(this.storageIds.instruments.transponderMode)
     var transponderCode = GetStoredData(this.storageIds.instruments.transponderCode)
 
     logger.log('applying altimeter state', altimeter)
     logger.log('applying heading state', heading)
+    logger.log('applying course state', course)
+    logger.log('applying obs state', obs)
     logger.log('applying transponder mode state', transponderMode)
     logger.log('applying transponder code state', transponderCode)
 
     SimVar.SetSimVarValue('K:KOHLSMAN_SET', 'millibars scaler 16', Number(altimeter))
     SimVar.SetSimVarValue('AUTOPILOT HEADING LOCK DIR', 'degrees', Number(heading))
+    // todo: figure out why this isn't working
+    // maybe these aren't writable?
+    SimVar.SetSimVarValue('NAV OBS:1', 'degrees', Number(course))
+    SimVar.SetSimVarValue('NAV OBS:2', 'degrees', Number(obs))
     SimVar.SetSimVarValue('TRANSPONDER STATE:1', 'Enum', Number(transponderMode || 0))
     SimVar.SetSimVarValue('TRANSPONDER CODE:1', 'Bco16', Number(transponderCode || 7000))
   }
