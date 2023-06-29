@@ -43,6 +43,7 @@ c182rg-improvement-project/
     * altimeter setting
     * transponder mode and code
     * flap handle position
+    * flaps position
 * bug fixes from non-modded plane
     * autopilot panel now requires avionics to be turned on
 
