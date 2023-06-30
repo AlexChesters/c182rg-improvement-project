@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "sh scripts/prebuild.sh",
-    "build": "sh scripts/build.sh",
-    "postbuild": "sh scripts/postbuild.sh"
+    "prebuild": "sh ci/scripts/prebuild.sh",
+    "build": "sh ci/scripts/build.sh",
+    "postbuild": "sh ci/scripts/postbuild.sh",
+    "verify-manifest-version": "python ci/scripts/verify-manifest-version.py"
   },
   "author": "Alex Chesters",
   "license": "MIT",
