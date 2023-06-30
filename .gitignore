@@ -62,4 +62,5 @@ TEST-results.xml
 .eslintcache
 *v8.log
 /lib/
-build/
+dist/
+.rollup.cache/
