@@ -6,7 +6,7 @@ import typescript from '@rollup/plugin-typescript'
 const stateSaving = {
   input: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.ts',
   output: {
-    dir: 'build',
+    dir: 'dist',
     format: 'es'
   },
   plugins: [
@@ -16,22 +16,22 @@ const stateSaving = {
       targets: [
         {
           src: '*.json',
-          dest: 'build'
+          dest: 'dist'
         },
         {
           src: 'html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.html',
-          dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving'
+          dest: 'dist/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving'
         },
         {
           src: 'SimObjects',
-          dest: 'build'
+          dest: 'dist'
         }
       ]
     }),
     mv([
       {
-        src: 'build/AC182RG.js',
-        dest: 'build/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.js'
+        src: 'dist/AC182RG.js',
+        dest: 'dist/html_ui/Pages/VCockpit/Instruments/AlexChesters/StateSaving/AC182RG.js'
       }
     ])
   ]
