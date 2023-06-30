@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "carenado-aircraft-c182rg",
-      "package_version": "1.0.1"
+      "package_version": "1.0.2"
     }
   ],
   "content_type": "AIRCRAFT",
