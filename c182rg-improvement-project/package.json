@@ -6,7 +6,8 @@
   "scripts": {
     "prebuild": "sh ci/scripts/prebuild.sh",
     "build": "sh ci/scripts/build.sh",
-    "postbuild": "sh ci/scripts/postbuild.sh"
+    "postbuild": "sh ci/scripts/postbuild.sh",
+    "verify-manifest-version": "python ci/scripts/verify-manifest-version.py"
   },
   "author": "Alex Chesters",
   "license": "MIT",

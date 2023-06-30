@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v2
+      - name: verify manifest version
+        run: npm run verify-manifest-version
       - name: set up node.js
         uses: actions/setup-node@v1
         with:
