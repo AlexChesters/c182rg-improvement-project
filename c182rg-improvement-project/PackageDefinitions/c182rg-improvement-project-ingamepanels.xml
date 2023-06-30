@@ -1,0 +1,22 @@
+<AssetPackage Name="c182rg-improvement-project-ingamepanels" Version="2.0.0">
+	<ItemSettings>
+		<ContentType>SPB</ContentType>
+		<Title>c182rg-improvement-project-ingamepanels</Title>
+		<Manufacturer>Alex Chesters</Manufacturer>
+		<Creator>Alex Chesters</Creator>
+	</ItemSettings>
+	<Flags>
+		<VisibleInStore>false</VisibleInStore>
+		<CanBeReferenced>false</CanBeReferenced>
+	</Flags>
+	<AssetGroups>
+		<AssetGroup Name="c182rg-improvement-project-ingamepanels">
+			<Type>SPB</Type>
+			<Flags>
+				<FSXCompatibility>false</FSXCompatibility>
+			</Flags>
+			<AssetDir>PackageSources\</AssetDir>
+			<OutputDir>Build\</OutputDir>
+		</AssetGroup>
+	</AssetGroups>
+</AssetPackage>

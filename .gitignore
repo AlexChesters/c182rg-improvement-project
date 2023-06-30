@@ -64,3 +64,5 @@ TEST-results.xml
 /lib/
 dist/
 .rollup.cache/
+_Temp/
+Packages/

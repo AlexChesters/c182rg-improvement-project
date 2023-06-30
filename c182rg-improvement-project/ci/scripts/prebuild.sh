@@ -1,3 +1,3 @@
 set -e
 
-rm -rf dist
+rm -rf dist Packages

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "sh ci/scripts/prebuild.sh",
-    "build": "sh ci/scripts/build.sh",
+    "build:mod": "sh ci/scripts/build-mod.sh",
+    "build:toolbar": "sh ci/scripts/build-toolbar.sh",
+    "build": "npm run build:mod && npm run build:toolbar",
     "postbuild": "sh ci/scripts/postbuild.sh",
     "verify-manifest-version": "python ci/scripts/verify-manifest-version.py"
   },
