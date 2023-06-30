@@ -47,8 +47,6 @@ c182rg-improvement-project/
     * pilot, copilot and baggage doors
     * pilot and copilot windows
     * static elements (e.g. rain cover)
-* bug fixes from non-modded plane
-    * autopilot panel now requires avionics to be turned on
 
 # Planned features
 Planned features can be found by looking at the
