@@ -244,6 +244,9 @@ class AC182RG extends BaseInstrument {
   }
 
   persistState() {
+    var shouldStateSave = SimVar.GetSimVarValue('L:AC182RG_STATE_SAVING_ENABLED', 'number')
+    console.log('should state save', Number(shouldStateSave))
+
     try {
       this.persistFuelState()
       this.persistSwitchPanelState()
