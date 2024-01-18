@@ -5,7 +5,7 @@
 Mod to improve the Carenado C182RG for MSFS
 
 # Development version
-The development version is the latest (and therefore potentially unstable) version version. If you use this version you
+The development version is the latest (and therefore potentially unstable) version. If you use this version you
 should expect to encounter bugs.
 
 The development version can be downloaded from
