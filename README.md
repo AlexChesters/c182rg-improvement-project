@@ -47,6 +47,7 @@ c182rg-improvement-project/
     * pilot, copilot and baggage doors
     * pilot and copilot windows
     * static elements (e.g. rain cover)
+    * payload weights (pilots, passengers and baggage)
 
 # Planned features
 Planned features can be found by looking at the
