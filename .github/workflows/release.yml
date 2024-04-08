@@ -39,7 +39,7 @@ jobs:
       - name: package docs
         run: Compress-Archive -Path README.txt -Update -DestinationPath c182rg-improvement-project.zip
       - name: assume-github-actions-role
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
           aws-region: eu-west-1
