@@ -11,6 +11,13 @@ type AC182RGPersistentStorageIds = {
     leftTankVolume: string,
     rightTankVolume: string
   },
+  payload: {
+    pilot: string,
+    copilot: string,
+    backPaxLeft: string,
+    backPaxRight: string,
+    baggage: string
+  },
   switchPanel: {
     masterBattery: string,
     alternator: string,
@@ -69,6 +76,13 @@ class AC182RG extends BaseInstrument {
       fuel: {
         leftTankVolume: `AC182RG_LEFT_FUEL_TANK_${this.aircraftIdentifier}`,
         rightTankVolume: `AC182RG_RIGHT_FUEL_TANK_${this.aircraftIdentifier}`
+      },
+      payload: {
+        pilot: `AC182RG_PAYLOAD_PILOT_${this.aircraftIdentifier}`,
+        copilot: `AC182RG_PAYLOAD_COPILOT_${this.aircraftIdentifier}`,
+        backPaxLeft: `AC182RG_PAYLOAD_BACKPAXLEFT_${this.aircraftIdentifier}`,
+        backPaxRight: `AC182RG_PAYLOAD_BACKPAXRIGHT_${this.aircraftIdentifier}`,
+        baggage: `AC182RG_PAYLOAD_BAGGAGE_${this.aircraftIdentifier}`
       },
       switchPanel: {
         masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
