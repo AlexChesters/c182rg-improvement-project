@@ -8,6 +8,11 @@ defaults:
   run:
     working-directory: c182rg-improvement-project
 
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write 
+
 jobs:
   build:
     name: pr-build
@@ -19,7 +24,7 @@ jobs:
       - name: set up node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 20
       - name: install dependencies
         run: npm ci
       - name: build code
@@ -32,3 +37,17 @@ jobs:
         run: Compress-Archive -Path c182rg-improvement-project -DestinationPath c182rg-improvement-project.zip
       - name: package docs
         run: Compress-Archive -Path README.txt -Update -DestinationPath c182rg-improvement-project.zip
+      - name: assume-github-actions-role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
+          aws-region: eu-west-1
+      - name: deploy
+        run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/${{ github.head_ref }}/c182rg-improvement-project.zip --cache-control max-age=60
+      - name: tag
+        run: aws s3api put-object-tagging --bucket projects-live-bucket-bucket-x5u4945s2wzh --key c182rg-improvement-project/${{ github.head_ref }}/c182rg-improvement-project.zip --tagging "TagSet=[{Key=expiry_days,Value=90}]"
+      - name: comment on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: Download the changes in this pull request [here](https://projects.alexchesters.com/c182rg-improvement-project/${{ github.head_ref }}/c182rg-improvement-project.zip).
+          comment_tag: download_link

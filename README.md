@@ -5,7 +5,7 @@
 Mod to improve the Carenado C182RG for MSFS
 
 # Development version
-The development version is the latest (and therefore potentially unstable) version version. If you use this version you
+The development version is the latest (and therefore potentially unstable) version. If you use this version you
 should expect to encounter bugs.
 
 The development version can be downloaded from
@@ -47,6 +47,7 @@ c182rg-improvement-project/
     * pilot, copilot and baggage doors
     * pilot and copilot windows
     * static elements (e.g. rain cover)
+    * payload weights (pilots, passengers and baggage)
 
 # Planned features
 Planned features can be found by looking at the

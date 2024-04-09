@@ -11,6 +11,13 @@ type AC182RGPersistentStorageIds = {
     leftTankVolume: string,
     rightTankVolume: string
   },
+  payload: {
+    pilot: string,
+    copilot: string,
+    backPaxLeft: string,
+    backPaxRight: string,
+    baggage: string
+  },
   switchPanel: {
     masterBattery: string,
     alternator: string,
@@ -69,6 +76,13 @@ class AC182RG extends BaseInstrument {
       fuel: {
         leftTankVolume: `AC182RG_LEFT_FUEL_TANK_${this.aircraftIdentifier}`,
         rightTankVolume: `AC182RG_RIGHT_FUEL_TANK_${this.aircraftIdentifier}`
+      },
+      payload: {
+        pilot: `AC182RG_PAYLOAD_PILOT_${this.aircraftIdentifier}`,
+        copilot: `AC182RG_PAYLOAD_COPILOT_${this.aircraftIdentifier}`,
+        backPaxLeft: `AC182RG_PAYLOAD_BACKPAXLEFT_${this.aircraftIdentifier}`,
+        backPaxRight: `AC182RG_PAYLOAD_BACKPAXRIGHT_${this.aircraftIdentifier}`,
+        baggage: `AC182RG_PAYLOAD_BAGGAGE_${this.aircraftIdentifier}`
       },
       switchPanel: {
         masterBattery: `AC182RG_MASTER_BATTERY_${this.aircraftIdentifier}`,
@@ -130,6 +144,26 @@ class AC182RG extends BaseInstrument {
     
     SetStoredData(this.storageIds.fuel.leftTankVolume, leftTankVolume.toString())
     SetStoredData(this.storageIds.fuel.rightTankVolume, rightTankVolume.toString())
+  }
+
+  persistPayloadState() {
+    var pilotWeight = SimVar.GetSimVarValue('PAYLOAD STATION WEIGHT:1', 'kilograms')
+    var copilotWeight = SimVar.GetSimVarValue('PAYLOAD STATION WEIGHT:2', 'kilograms')
+    var backPaxLeftWeight = SimVar.GetSimVarValue('PAYLOAD STATION WEIGHT:3', 'kilograms')
+    var backPaxRightWeight = SimVar.GetSimVarValue('PAYLOAD STATION WEIGHT:4', 'kilograms')
+    var baggageWeight = SimVar.GetSimVarValue('PAYLOAD STATION WEIGHT:5', 'kilograms')
+
+    logger.debug('persisting pilot weight (kgs)', pilotWeight)
+    logger.debug('persisting copilot weight (kgs)', copilotWeight)
+    logger.debug('persisting back pax left weight (kgs)', backPaxLeftWeight)
+    logger.debug('persisting back pax right weight (kgs)', backPaxRightWeight)
+    logger.debug('persisting baggage weight (kgs)', baggageWeight)
+
+    SetStoredData(this.storageIds.payload.pilot, pilotWeight.toString())
+    SetStoredData(this.storageIds.payload.copilot, copilotWeight.toString())
+    SetStoredData(this.storageIds.payload.backPaxLeft, backPaxLeftWeight.toString())
+    SetStoredData(this.storageIds.payload.backPaxRight, backPaxRightWeight.toString())
+    SetStoredData(this.storageIds.payload.baggage, baggageWeight.toString())
   }
   
   persistSwitchPanelState() {
@@ -249,6 +283,7 @@ class AC182RG extends BaseInstrument {
 
     try {
       this.persistFuelState()
+      this.persistPayloadState()
       this.persistSwitchPanelState()
       this.persistInstrumentsState()
       this.persistControlSurfaces()
@@ -269,6 +304,26 @@ class AC182RG extends BaseInstrument {
     
     SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'gallons', Number(leftTankStoredVolume || 10))
     SimVar.SetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'gallons', Number(rightTankStoredVolume || 10))
+  }
+
+  applyPayloadState() {
+    var pilotWeight = GetStoredData(this.storageIds.payload.pilot)
+    var copilotWeight = GetStoredData(this.storageIds.payload.copilot)
+    var backPaxLeftWeight = GetStoredData(this.storageIds.payload.backPaxLeft)
+    var backPaxRightWeight = GetStoredData(this.storageIds.payload.backPaxRight)
+    var baggageWeight = GetStoredData(this.storageIds.payload.baggage)
+    
+    logger.log('applying pilot weight (kgs) state', pilotWeight)
+    logger.log('applying copilot weight (kgs) state', copilotWeight)
+    logger.log('applying back pax left weight (kgs) state', backPaxLeftWeight)
+    logger.log('applying back pax right weight (kgs) state', backPaxRightWeight)
+    logger.log('applying baggage weight (kgs) state', baggageWeight)
+    
+    SimVar.SetSimVarValue('PAYLOAD STATION WEIGHT:1', 'kilograms', Number(pilotWeight || 77))
+    SimVar.SetSimVarValue('PAYLOAD STATION WEIGHT:2', 'kilograms', Number(copilotWeight || 77))
+    SimVar.SetSimVarValue('PAYLOAD STATION WEIGHT:3', 'kilograms', Number(backPaxLeftWeight || 0))
+    SimVar.SetSimVarValue('PAYLOAD STATION WEIGHT:4', 'kilograms', Number(backPaxRightWeight || 0))
+    SimVar.SetSimVarValue('PAYLOAD STATION WEIGHT:5', 'kilograms', Number(baggageWeight || 8))
   }
 
   applySwitchPanelState() {
@@ -422,6 +477,7 @@ class AC182RG extends BaseInstrument {
   applyState() {
     try {
       this.applyFuelState()
+      this.applyPayloadState()
       this.applySwitchPanelState()
       this.applyInstrumentState()
       this.applyControlSurfacesState()
