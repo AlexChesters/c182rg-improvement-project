@@ -16,7 +16,7 @@
     "@microsoft/msfs-types": "^1.14.6",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-typescript": "^11.1.1",
-    "rollup": "^2.79.1",
+    "rollup": "^4.22.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-import-css": "^3.2.1",
     "rollup-plugin-mv": "^0.0.2",
