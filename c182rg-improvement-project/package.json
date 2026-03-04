@@ -14,8 +14,8 @@
   "devDependencies": {
     "@microsoft/msfs-sdk": "^0.4.0",
     "@microsoft/msfs-types": "^1.14.6",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-typescript": "^11.1.1",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
     "rollup": "^4.59.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-import-css": "^4.2.0",
