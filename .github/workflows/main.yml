@@ -36,9 +36,11 @@ jobs:
       - name: package docs
         run: Compress-Archive -Path README.txt -Update -DestinationPath c182rg-improvement-project.zip
       - name: assume-github-actions-role
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.PROJECTS_BUCKET_LIVE_UPLOAD_ROLE_ARN }}
           aws-region: eu-west-1
       - name: deploy
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: aws s3 cp c182rg-improvement-project.zip s3://projects-live-bucket-bucket-x5u4945s2wzh/c182rg-improvement-project/development/c182rg-improvement-project.zip --cache-control max-age=60
